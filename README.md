@@ -1,8 +1,25 @@
 # JPool TypeScript SDK
 
-TypeScript SDK for interacting with the JPool Solana liquid staking pool.
+TypeScript SDK for interacting with the JPool liquid staking pool on Solana. The SDK provides the following features:
 
+- Stake SOL and receive LST pool tokens
+- Unstake SOL instantly
+- Stake to specific validators
+- Query pool state, rates, and fees
+- Check direct stakes and wallet bindings
 
+## Table of contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Important Notes](#important-notes)
+- [Examples](#examples)
+- [Constants](#constants)
+- [API Reference](#api-reference)
+- [Links](#links)
+- [License](#license)
 
 ## Installation
 
@@ -32,18 +49,17 @@ console.log('Total staked:', Number(poolInfo.totalLamports) / LAMPORTS_PER_SOL, 
 const rate = client.poolTokenRate(poolInfo)
 console.log('Exchange rate:', rate, 'lamports per pool token')
 ```
-
-## Features
-
-- **Deposit SOL** - Stake SOL and receive LST pool tokens
-- **Withdraw SOL** - Unstake SOL instantly
-- **Direct Staking** - Stake to specific validators
-- **Pool Information** - Query pool state, rates, and fees
-- **Balance Tracking** - Check direct stakes and wallet bindings
-
 ## Usage
 
+- [Deposit SOL](#deposit-sol)
+- [Deposit with Direct Staking](#deposit-with-direct-staking)
+- [Withdraw SOL](#withdraw-sol)
+- [Withdraw stake account](#withdraw-stake-account)
+- [Get direct stake](#get-direct-stake)
+
 ### Deposit SOL
+
+Stake SOL and receive liquid pool tokens:
 
 ```typescript
 import { Transaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
@@ -69,7 +85,7 @@ transaction.sign(...signers)
 
 ### Deposit with Direct Staking
 
-Support a specific validator while maintaining pool token liquidity:
+Stake to specific validators:
 
 ```typescript
 const validatorVoteAccount = new PublicKey('VALIDATOR_VOTE_ACCOUNT')
@@ -82,6 +98,8 @@ const { instructions, signers } = await client.depositSol({
 ```
 
 ### Withdraw SOL
+
+Unstake pool token to receive SOL:
 
 ```typescript
 // Amount is in pool tokens, not SOL
@@ -97,9 +115,9 @@ const transaction = new Transaction().add(...instructions)
 // ... configure, sign, and send
 ```
 
-### Withdraw Stake Account
+### Withdraw stake account
 
-Receive a delegated stake account instead of liquid SOL:
+Receive a delegated stake account:
 
 ```typescript
 const { instructions, signers } = await client.withdrawStake({
@@ -108,16 +126,17 @@ const { instructions, signers } = await client.withdrawStake({
 })
 ```
 
-### Get Direct Stakes
+### Get direct stake
 
-Query your direct stake positions:
+Query direct stake positions by wallet or validator:
 
 ```typescript
+// By wallet
 const directStakes = await client.getDirectStakes({
   wallet: userPublicKey,
 })
 
-// Or query by validator
+// By validator
 const validatorStakes = await client.getDirectStakes({
   vote: validatorVoteAccount,
 })
@@ -125,7 +144,7 @@ const validatorStakes = await client.getDirectStakes({
 
 ## Configuration
 
-### Custom Configuration
+Add custom configuration:
 
 ```typescript
 import { STAKE_POOL_PROGRAM_ID } from '@solana/spl-stake-pool'
@@ -137,45 +156,29 @@ const client = new JPoolClient(connection, {
 })
 ```
 
-### Update Configuration
+Update configuration:
 
 ```typescript
 // Update individual options
 client.configure('refCode', 'NEW_REFERRAL_CODE')
 ```
 
-## API Reference
+## Important notes
 
-### JPoolClient
+### Transaction signing
 
-#### Methods
-
-- `poolInfo(): Promise<StakePoolInfo>` - Get current pool state and statistics
-- `poolTokenRate(poolInfo): number` - Calculate lamports per pool token exchange rate
-- `reserveBalance(poolInfo): Promise<number>` - Get current reserve balance
-- `depositSol(props): Promise<{instructions, signers}>` - Deposit SOL into the pool
-- `depositStake(props): Promise<{instructions, signers}>` - Deposit stake account into the pool
-- `withdrawSol(props): Promise<{instructions, signers}>` - Withdraw SOL from the pool
-- `withdrawStake(props): Promise<{instructions, signers}>` - Withdraw as stake account
-- `getDirectStakes(query): Promise<any>` - Query direct stake records
-- `getWalletBindings(query): Promise<any>` - Query wallet bindings
-
-## Important Notes
-
-### Transaction Signing
-
-All SDK methods return `{ instructions, signers }` where:
-- **instructions** - Array of transaction instructions to add to your transaction
-- **signers** - Ephemeral keypairs that must sign the transaction along with your wallet
+All transaction-building methods return `{ instructions, signers }` where:
+- `instructions`: Array of transaction instructions to add to your transaction.
+- `signers`: Ephemeral keypairs that must sign the transaction along with your wallet.
 
 **You must:**
-1. Create a `Transaction` and add the instructions
-2. Set the transaction's `recentBlockhash` and `feePayer`
-3. Sign with ephemeral signers: `transaction.sign(...signers)`
-4. Sign with your wallet (e.g., Phantom, Solflare)
-5. Send the transaction to the network
+1. Create a `Transaction` and add the instructions.
+2. Set the transaction's `recentBlockhash` and `feePayer`.
+3. Sign with ephemeral signers: `transaction.sign(...signers)`.
+4. Sign with your wallet (e.g., Phantom, Solflare).
+5. Send the transaction to the network.
 
-### Pool Token Amounts
+### Pool token amounts
 
 When withdrawing, the `amount` parameter is in **pool tokens**, not SOL:
 ```typescript
@@ -188,8 +191,8 @@ const expectedSOL = poolTokenAmount * rate
 ### Fees
 
 All operations have fees that are automatically deducted:
-- Deposit fee: Applied when depositing SOL
-- Withdrawal fee: Applied when withdrawing SOL or stake
+- Deposit fee: Applied when depositing SOL.
+- Withdrawal fee: Applied when withdrawing SOL or unstaking.
 
 Check current fees:
 ```typescript
@@ -201,13 +204,15 @@ console.log('Withdrawal fee:', poolInfo.solWithdrawalFee * 100, '%')
 ## Examples
 
 See the `example/` directory for complete working examples:
-- `example/deposit.ts` - Deposit operations and calculations
-- `example/withdraw.ts` - Withdrawal operations and balance checking
+- `example/deposit.ts`: Deposit operations and calculations.
+- `example/withdraw.ts`: Withdrawal operations and balance checking.
+- `example/info.ts`: Inspect pool state and relations.
 
 Run examples:
 ```bash
 npx tsx example/deposit.ts
 npx tsx example/withdraw.ts
+npx tsx example/info.ts
 ```
 
 ## Constants
@@ -219,10 +224,24 @@ console.log('Pool address:', POOL_ADDRESS.toBase58())
 console.log('Pool token mint:', POOL_MINT_ADDRESS.toBase58())
 ```
 
+## API reference
+
+| Method                                   | Returns                            | Description                                      |
+| ---------------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| `poolInfo()`                             | `Promise<StakePoolInfo>`          | Get current pool state and statistics           |
+| `poolTokenRate(poolInfo)`               | `number`                          | Lamports per pool token exchange rate           |
+| `reserveBalance(poolInfo)`              | `Promise<number>`                 | Get current reserve balance in lamports         |
+| `depositSol(props)`                     | `Promise<{ instructions, signers }>` | Deposit SOL into the pool                   |
+| `depositStake(props)`                   | `Promise<{ instructions, signers }>` | Delegate a stake account to the pool         |
+| `withdrawSol(props)`                    | `Promise<{ instructions, signers }>` | Withdraw SOL from the pool                |
+| `withdrawStake(props)`                  | `Promise<{ instructions, signers }>` | Withdraw as a delegated stake account           |
+| `getDirectStakes(query)`                | `Promise<DirectStakeRecord[]>`   | Query direct stake records                      |
+| `getWalletBindings(query)`              | `Promise<WalletBinding[]>`       | Query wallet binding records                    |
+
 ## Links
 
-- [JPool Website](https://jpool.one)
-- [JPool Documentation](https://docs.jpool.one)
+- JPool website: [https://jpool.one](https://jpool.one)
+- JPool documentation: [https://docs.jpool.one](https://docs.jpool.one)
 
 ## License
 
