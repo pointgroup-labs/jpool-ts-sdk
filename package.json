@@ -13,6 +13,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
+    "prepack": "pnpm run build",
     "release": "release-it",
     "release:ci": "release-it --ci -i patch -VV",
     "release:dry": "release-it --ci --dry-run -i patch",
