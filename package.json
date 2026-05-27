@@ -1,7 +1,7 @@
 {
   "name": "@jpool/sdk",
-  "version": "0.1.1",
-  "packageManager": "pnpm@10.22.0",
+  "version": "0.1.2",
+  "packageManager": "pnpm@11.3.0",
   "sideEffects": false,
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -20,24 +20,19 @@
     "release:pre:dry": "release-it --preRelease=next --dry-run --ci"
   },
   "dependencies": {
+    "@jpool/spl-stake-pool": "^1.1.10",
     "@solana/spl-memo": "^0.2.5",
-    "@solana/spl-stake-pool": "^1.1.8",
     "@solana/web3.js": "^1.98.4",
-    "axios": "^1.13.2"
+    "axios": "^1.16.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^6.2.0",
-    "@release-it/conventional-changelog": "^10.0.2",
-    "@types/node": "^24.10.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-format": "^1.0.2",
-    "release-it": "^19.0.6",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "@solana/spl-stake-pool": "https://github.com/mfactory-lab/spl-stake-pool.git#7607823"
-    }
+    "@antfu/eslint-config": "^9.0.0",
+    "@release-it/conventional-changelog": "^11.0.0",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "eslint-plugin-format": "^2.0.1",
+    "release-it": "^20.0.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
   }
 }

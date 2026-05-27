@@ -1,5 +1,5 @@
 import type { Axios } from 'axios'
-import { StakePool } from '@solana/spl-stake-pool'
+import { StakePool } from '@jpool/spl-stake-pool'
 import axios from 'axios'
 import { JPoolClient, StakePoolInfo } from './index'
 
@@ -34,7 +34,7 @@ function feeToPercentage(numerator: bigint, denominator: bigint): number {
 /**
  * Converts a raw StakePool from spl-stake-pool into an enhanced StakePoolInfo format.
  *
- * @param rawPool - The raw stake pool data from @solana/spl-stake-pool
+ * @param rawPool - The raw stake pool data from @jpool/spl-stake-pool
  * @returns A more developer-friendly formatted stake pool object
  *
  * @remarks

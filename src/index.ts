@@ -3,8 +3,6 @@ import type {
   StakePoolInfo,
   WalletBindingsQuery,
 } from './types'
-import { createMemoInstruction } from '@solana/spl-memo'
-
 import {
   depositSol,
   depositStake,
@@ -12,7 +10,8 @@ import {
   STAKE_POOL_PROGRAM_ID,
   withdrawSol,
   withdrawStake,
-} from '@solana/spl-stake-pool'
+} from '@jpool/spl-stake-pool'
+import { createMemoInstruction } from '@solana/spl-memo'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { version } from '../package.json'
 import {

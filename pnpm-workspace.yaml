@@ -1,3 +1,20 @@
+minimumReleaseAgeExclude:
+  - '@jpool/spl-stake-pool@1.1.10'
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - chokidar@4.0.3
+  - undici-types@6.21.0
+
+allowBuilds:
+  bigint-buffer: true
+  bufferutil: true
+  esbuild: true
+  utf-8-validate: true
+
 onlyBuiltDependencies:
   - bigint-buffer
   - bufferutil
