@@ -64,8 +64,8 @@ async function depositSolWithDirectStakeExample() {
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
   const client = new JPoolClient(connection)
 
-  const userPublicKey = new PublicKey('YOUR_WALLET_ADDRESS_HERE')
-  const validatorVoteAccount = new PublicKey('VALIDATOR_VOTE_ACCOUNT_HERE')
+  const userPublicKey = PublicKey.unique()
+  const validatorVoteAccount = PublicKey.unique()
 
   const amountToDeposit = 5 * LAMPORTS_PER_SOL
 
@@ -89,6 +89,9 @@ async function depositSolWithDirectStakeExample() {
     console.log('✓ Transaction prepared')
     console.log('  Your stake will be directed to the specified validator')
     console.log('  You will still receive liquid pool tokens')
+
+    // const res = await connection.simulateTransaction(transaction)
+    // console.log(res)
   } catch (error) {
     console.error('Error:', error)
     throw error
@@ -192,7 +195,7 @@ async function main() {
 
     // Uncomment to run transaction examples:
     // await depositSolExample()
-    // await depositSolWithDirectStakeExample()
+    await depositSolWithDirectStakeExample()
     // await depositStakeExample()
 
     console.log('\n✓ Examples completed successfully')
