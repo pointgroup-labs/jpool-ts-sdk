@@ -13,6 +13,7 @@ export default defineConfig((options: Options) => ({
   external: [
     /@project-serum\/.*/,
     /@coral-xyz\/.*/,
+    /@jpool\/.*/,
     /@solana\/.*/,
   ],
   ...options,
