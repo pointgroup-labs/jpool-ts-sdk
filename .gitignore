@@ -37,3 +37,6 @@ dist-ssr
 .unlighthouse
 
 /tmp
+
+# AI tool configs
+CLAUDE.md

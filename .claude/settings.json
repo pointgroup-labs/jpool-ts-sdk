@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "event": "Bash",
+        "command": "bash .claude/scripts/env-check.sh"
+      }
+    ]
+  }
+}
