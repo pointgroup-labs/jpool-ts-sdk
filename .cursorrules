@@ -1,0 +1,32 @@
+# JPool TypeScript SDK — Development Guide
+
+## Project Overview
+Solana liquid staking SDK (`@jpool/sdk`). Pool address: `CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1`
+
+## Required Context
+Always read these files when starting any task to ensure correct context:
+- `package.json` — dependencies, scripts
+- `src/constants.ts` — pool addresses, API URLs
+- `src/types.ts` — TypeScript interfaces
+- `tsconfig.json` — compiler options
+- `.env`, `.env.local`, `.env.production` — RPC endpoints and keys (if present)
+- `~/.config/solana/id.json` — local Solana keypair (needed for example scripts)
+
+## Code Standards
+- TypeScript strict mode (`"strict": true`)
+- ESM + CJS dual output via tsup
+- Use `@solana/web3.js` v1.x patterns (PublicKey, Connection, Transaction)
+- All public methods must have JSDoc with `@param` and `@returns`
+- Prefer `bigint` over `BN.js` for numeric values
+- Error handling: throw typed errors, never return null for failures
+
+## Testing
+- Run examples: `npx tsx example/info.ts`
+- Build check: `pnpm build`
+- Lint: `pnpm lint`
+
+## Solana-Specific Rules
+- Always validate PublicKey inputs with `try { new PublicKey(input) }`
+- Use `Connection.getLatestBlockhash()` not deprecated `getRecentBlockhash()`
+- Memo instructions: use `@solana/spl-memo` for ref/direct-stake memos
+- Transaction size limit: max 1232 bytes
